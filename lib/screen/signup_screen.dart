@@ -26,7 +26,6 @@ class _SignupScreenState extends State<SignupScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: ListView(
             children: [
-              // Centered Facebook logo
               Padding(
                 padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
                 child: Center(
@@ -40,7 +39,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              // Form container with shadow
               Container(
                 padding: EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
@@ -60,7 +58,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Title and subtitle
                       Text(
                         'Tạo tài khoản mới',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -71,7 +68,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                       SizedBox(height: 12),
-                      // First name and surname
                       Row(
                         children: [
                           Expanded(
@@ -120,14 +116,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                       SizedBox(height: 12),
-                      // Date of Birth
                       Text('Ngày sinh ?', style: TextStyle(color: Colors.grey[600], fontSize: 14)),
                       Row(
                         children: [
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: selectedDay,
-                              hint: Text('28', style: TextStyle(fontSize: 14)),
+                              hint: Text('Ngày', style: TextStyle(fontSize: 14)),
                               items: days.map((int day) {
                                 return DropdownMenuItem<int>(
                                   value: day,
@@ -161,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: selectedMonth,
-                              hint: Text('Tháng 5', style: TextStyle(fontSize: 14)),
+                              hint: Text('Tháng', style: TextStyle(fontSize: 14)),
                               items: months.map((int month) {
                                 return DropdownMenuItem<int>(
                                   value: month,
@@ -195,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: selectedYear,
-                              hint: Text('2025', style: TextStyle(fontSize: 14)),
+                              hint: Text('Năm', style: TextStyle(fontSize: 14)),
                               items: years.map((int year) {
                                 return DropdownMenuItem<int>(
                                   value: year,
@@ -204,7 +199,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               }).toList(),
                               onChanged: (value) {
                                 setState(() {
-                                  selectedYear: value;
+                                  selectedYear = value;
                                   _updateDateOfBirth();
                                 });
                               },
@@ -228,7 +223,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                       SizedBox(height: 12),
-                      // Gender selection
                       Text('Giới tính ?', style: TextStyle(color: Colors.grey[600], fontSize: 14)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -307,7 +301,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           validator: (value) => _logic.validateGender(_logic.gender),
                         ),
                       SizedBox(height: 12),
-                      // Mobile number or email
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Số di động hoặc email',
@@ -328,7 +321,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         validator: (value) => _logic.validateEmail(value),
                       ),
                       SizedBox(height: 12),
-                      // Password
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Mật khẩu mới',
@@ -350,7 +342,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         validator: (value) => _logic.validatePassword(value),
                       ),
                       SizedBox(height: 12),
-                      // Informational text
                       Text(
                         'Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. Tìm hiểu thêm.',
                         style: TextStyle(fontSize: 11, color: Colors.grey[600]),
@@ -361,7 +352,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                       ),
                       SizedBox(height: 16),
-                      // Sign Up button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -392,7 +382,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       SizedBox(height: 12),
-                      // Already have an account link
                       Center(
                         child: TextButton(
                           onPressed: () {
@@ -418,10 +407,20 @@ class _SignupScreenState extends State<SignupScreen> {
   void _updateDateOfBirth() {
     if (selectedDay != null && selectedMonth != null && selectedYear != null) {
       try {
-        _logic.updateField(
-          'dateOfBirth',
-          DateTime(selectedYear!, selectedMonth!, selectedDay!),
-        );
+        DateTime tempDate = DateTime(selectedYear!, selectedMonth!, selectedDay!);
+        _logic.updateField('dateOfBirth', tempDate);
+        String? error = _logic.validateDateOfBirth(tempDate);
+        if (error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error)),
+          );
+          setState(() {
+            selectedDay = null;
+            selectedMonth = null;
+            selectedYear = null;
+            _logic.dateOfBirth = null;
+          });
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Ngày không hợp lệ!')),
@@ -430,6 +429,7 @@ class _SignupScreenState extends State<SignupScreen> {
           selectedDay = null;
           selectedMonth = null;
           selectedYear = null;
+          _logic.dateOfBirth = null;
         });
       }
     }

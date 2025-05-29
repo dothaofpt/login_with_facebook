@@ -1,6 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 class LoginLogic {
   String email = '';
   String password = '';
@@ -9,7 +6,7 @@ class LoginLogic {
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Email hoặc số điện thoại là bắt buộc';
     if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value) &&
-        !RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
+        !RegExp(r'^(?:\+84|0)[1-9][0-9]{8,9}$').hasMatch(value)) {
       return 'Vui lòng nhập email hoặc số điện thoại hợp lệ';
     }
     return null;
@@ -26,23 +23,12 @@ class LoginLogic {
       return false;
     }
 
-    try {
-      final response = await http.post(
-        Uri.parse('https://api.example.com/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password, // Should be hashed in production
-        }),
-      );
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        errorMessage = 'Đăng nhập thất bại: ${response.body}';
-        return false;
-      }
-    } catch (e) {
-      errorMessage = 'Không có kết nối internet';
+    // Logic giả lập: Nếu email và password không rỗng, giả định đăng nhập thành công
+    await Future.delayed(Duration(seconds: 1)); // Giả lập thời gian xử lý
+    if (email.isNotEmpty && password.isNotEmpty) {
+      return true;
+    } else {
+      errorMessage = 'Email hoặc mật khẩu không hợp lệ';
       return false;
     }
   }

@@ -1,12 +1,10 @@
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SignupLogic {
   String firstName = '';
   String surname = '';
   DateTime? dateOfBirth;
-  String gender = 'Nữ'; // Default to "Nữ" to match the image
+  String gender = 'Nữ';
   bool isCustomGender = false;
   String customGender = '';
   String email = '';
@@ -30,7 +28,8 @@ class SignupLogic {
   String? validateDateOfBirth(DateTime? value) {
     if (value == null) return 'Ngày sinh là bắt buộc';
     if (value.isAfter(DateTime.now())) return 'Ngày sinh không thể ở tương lai';
-    if (value.isAfter(DateTime(2012, 5, 29))) return 'Bạn phải ít nhất 13 tuổi';
+    DateTime ageLimit = DateTime(2012, 5, 29); // 13 years before today (29/5/2025)
+    if (value.isAfter(ageLimit)) return 'Bạn phải ít nhất 13 tuổi';
     return null;
   }
 
@@ -45,7 +44,7 @@ class SignupLogic {
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Số di động hoặc email là bắt buộc';
     if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value) &&
-        !RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
+        !RegExp(r'^(?:\+84|0)[1-9][0-9]{8,9}$').hasMatch(value)) {
       return 'Vui lòng nhập email hoặc số điện thoại hợp lệ';
     }
     return null;
@@ -55,7 +54,7 @@ class SignupLogic {
     if (value == null || value.isEmpty) return 'Mật khẩu là bắt buộc';
     if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
         .hasMatch(value)) {
-      return 'Mật khẩu phải dài ít nhất 8 ký tự và bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
+      return 'Mật khẩu phải dài ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
     }
     return null;
   }
@@ -71,27 +70,12 @@ class SignupLogic {
       return false;
     }
 
-    try {
-      final response = await http.post(
-        Uri.parse('https://api.example.com/signup'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'firstName': firstName,
-          'surname': surname,
-          'dateOfBirth': DateFormat('yyyy-MM-dd').format(dateOfBirth!),
-          'gender': isCustomGender ? customGender : gender,
-          'email': email,
-          'password': password, // Should be hashed in production
-        }),
-      );
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        errorMessage = 'Đăng ký thất bại: ${response.body}';
-        return false;
-      }
-    } catch (e) {
-      errorMessage = 'Không có kết nối internet';
+    // Logic giả lập: Nếu tất cả dữ liệu hợp lệ, giả định đăng ký thành công
+    await Future.delayed(Duration(seconds: 1)); // Giả lập thời gian xử lý
+    if (firstName.isNotEmpty && surname.isNotEmpty && dateOfBirth != null && email.isNotEmpty && password.isNotEmpty) {
+      return true;
+    } else {
+      errorMessage = 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại';
       return false;
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import '../logic/LoginLogic.dart';
-import './signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,32 +16,30 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Reduced vertical padding
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: ListView(
             children: [
-              // Centered Facebook logo
               Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0), // Reduced padding
+                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
                 child: Center(
                   child: Text(
                     'facebook',
                     style: TextStyle(
-                      fontSize: 32, // Reduced font size
+                      fontSize: 32,
                       color: Color(0xFF1877F2),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-              // Form container with shadow
               Container(
-                padding: EdgeInsets.all(12.0), // Reduced padding
+                padding: EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2), // Softer shadow
+                      color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 1,
                       blurRadius: 4,
                       offset: Offset(0, 2),
@@ -53,65 +51,61 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Title
                       Text(
                         'Đăng nhập Facebook',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // Reduced font size
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 12), // Reduced spacing
-                      // Email or phone number
+                      SizedBox(height: 12),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Email hoặc số điện thoại',
                           border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey[300]!), // Lighter border
+                            borderSide: BorderSide(color: Colors.grey[300]!),
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey[300]!), // Lighter border
+                            borderSide: BorderSide(color: Colors.grey[300]!),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1877F2), width: 2), // Blue focus
+                            borderSide: BorderSide(color: Color(0xFF1877F2), width: 2),
                           ),
                           filled: true,
                           fillColor: Colors.grey[100],
-                          contentPadding: EdgeInsets.symmetric(vertical: 10), // Reduced height
+                          contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
                         onChanged: (value) => _logic.updateField('email', value),
                         validator: (value) => _logic.validateEmail(value),
                       ),
-                      SizedBox(height: 12), // Reduced spacing
-                      // Password
+                      SizedBox(height: 12),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Mật khẩu',
                           border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey[300]!), // Lighter border
+                            borderSide: BorderSide(color: Colors.grey[300]!),
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey[300]!), // Lighter border
+                            borderSide: BorderSide(color: Colors.grey[300]!),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1877F2), width: 2), // Blue focus
+                            borderSide: BorderSide(color: Color(0xFF1877F2), width: 2),
                           ),
                           filled: true,
                           fillColor: Colors.grey[100],
-                          contentPadding: EdgeInsets.symmetric(vertical: 10), // Reduced height
+                          contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
                         obscureText: true,
                         onChanged: (value) => _logic.updateField('password', value),
                         validator: (value) => _logic.validatePassword(value),
                       ),
-                      SizedBox(height: 16), // Reduced spacing
-                      // Login button
+                      SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF1877F2),
                             foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 12), // Reduced button height
+                            padding: EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0), // Slightly smaller radius
+                              borderRadius: BorderRadius.circular(6.0),
                             ),
                           ),
                           onPressed: () async {
@@ -128,12 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             'Đăng nhập',
-                            style: TextStyle(fontSize: 14), // Reduced font size
+                            style: TextStyle(fontSize: 14),
                           ),
                         ),
                       ),
-                      SizedBox(height: 12), // Reduced spacing
-                      // Forgot account and sign up links
+                      SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -145,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Text(
                               'Bạn quên tài khoản ư?',
-                              style: TextStyle(color: Color(0xFF1877F2), fontSize: 12), // Reduced font size
+                              style: TextStyle(color: Color(0xFF1877F2), fontSize: 12),
                             ),
                           ),
                           Text(' • '),
@@ -155,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Text(
                               'Đăng ký Facebook',
-                              style: TextStyle(color: Color(0xFF1877F2), fontSize: 12), // Reduced font size
+                              style: TextStyle(color: Color(0xFF1877F2), fontSize: 12),
                             ),
                           ),
                         ],
